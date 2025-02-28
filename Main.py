@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 # Carregar variáveis do .env localmente
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
+MODE = os.getenv("MODE")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -17,13 +18,13 @@ queue = []
 current_voice_client = None
 
 # Caminho do ffmpeg
-ffmpeg_path = r'ffmpeg.exe'
+if MODE == 1:
+  ffmpeg_path = r'ffmpeg.exe'
 
 
 def download_audio(url):
   ydl_opts = {
     'format': 'bestaudio/best',
-    'ffmpeg_location': r'.',
     'postprocessors': [{
       'key': 'FFmpegExtractAudio',
       'preferredcodec': 'mp3',
@@ -34,6 +35,9 @@ def download_audio(url):
     'nocheckcertificate': True,
     'quiet': True
   }
+
+  if MODE == 0:
+    ydl_opts['ffmpeg_location'] = r'.'
 
   print(ydl_opts)
 
@@ -94,8 +98,14 @@ async def play_next(interaction: discord.Interaction):
   file_path = download_audio(url)
 
   # Passa o caminho do ffmpeg na execução do FFmpegPCMAudio
-  current_voice_client.play(discord.FFmpegPCMAudio(file_path, options="-b:a 192k -bufsize 64k", executable=ffmpeg_path),
-                            after=lambda e: asyncio.run_coroutine_threadsafe(play_next(interaction), bot.loop))
+  if MODE == 0:
+    current_voice_client.play(
+      discord.FFmpegPCMAudio(file_path, options="-b:a 192k -bufsize 64k", executable=ffmpeg_path),
+      after=lambda e: asyncio.run_coroutine_threadsafe(play_next(interaction), bot.loop))
+  else:
+    current_voice_client.play(
+      discord.FFmpegPCMAudio(file_path, options="-b:a 192k -bufsize 64k"),
+      after=lambda e: asyncio.run_coroutine_threadsafe(play_next(interaction), bot.loop))
   await interaction.followup.send(f"Tocando agora: {url}")
 
 

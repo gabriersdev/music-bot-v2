@@ -1,6 +1,10 @@
 # Use uma imagem base Python adequada (com a versão que seu projeto precisa)
 FROM python:3.12-slim
 
+# Atualizar pacotes e instalar FFmpeg
+RUN apt-get update && apt-get install -y ffmpeg && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
@@ -12,9 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o código-fonte do projeto
 COPY . .
-
-# Define a porta que a aplicação irá expor
-EXPOSE 8001
 
 # Comando para executar a aplicação
 CMD ["python", "Main.py"]
