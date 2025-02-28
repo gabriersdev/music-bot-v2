@@ -66,6 +66,10 @@ async def play(interaction: discord.Interaction, url: str):
     await interaction.response.send_message("Você precisa estar em um canal de voz!")
     return
 
+  elif url.find('https://') == -1 or url.find("youtu") == -1:
+    await interaction.response.send_message("O parâmetro informado não é uma URL do Youtube!")
+    return
+
   voice_channel = interaction.user.voice.channel
   if current_voice_client is None or not current_voice_client.is_connected():
     current_voice_client = await voice_channel.connect(reconnect=True, timeout=60)
