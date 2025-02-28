@@ -18,7 +18,7 @@ queue = []
 current_voice_client = None
 
 # Caminho do ffmpeg
-if MODE == 1:
+if MODE == 0:
   ffmpeg_path = r'ffmpeg.exe'
 
 
