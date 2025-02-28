@@ -23,7 +23,7 @@ ffmpeg_path = r'libs\ffmpeg\bin\ffmpeg.exe'
 def download_audio(url):
   ydl_opts = {
     'format': 'bestaudio/best',
-    'ffmpeg_location': r'\libs\ffmpeg\bin',
+    'ffmpeg_location': r'libs\ffmpeg\bin',
     'postprocessors': [{
       'key': 'FFmpegExtractAudio',
       'preferredcodec': 'mp3',
