@@ -17,13 +17,13 @@ queue = []
 current_voice_client = None
 
 # Caminho do ffmpeg
-ffmpeg_path = r'libs\ffmpeg\bin\ffmpeg.exe'
+ffmpeg_path = r'ffmpeg.exe'
 
 
 def download_audio(url):
   ydl_opts = {
     'format': 'bestaudio/best',
-    'ffmpeg_location': r'libs\ffmpeg\bin',
+    'ffmpeg_location': r'.',
     'postprocessors': [{
       'key': 'FFmpegExtractAudio',
       'preferredcodec': 'mp3',
